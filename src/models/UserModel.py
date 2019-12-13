@@ -3,7 +3,7 @@ from marshmallow import fields, Schema
 import datetime
 from . import db
 
-from ..app import bcrypt # add this line
+from ..models import bcrypt # add this line
 
 class UserModel(db.Model):
     """
