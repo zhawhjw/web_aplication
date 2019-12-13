@@ -6,6 +6,7 @@ from . import db
 from ..models import bcrypt  # add this line
 from .BlogpostModel import BlogpostSchema
 
+
 class UserModel(db.Model):
     """
     User Model
@@ -28,7 +29,7 @@ class UserModel(db.Model):
         """
         self.name = data.get('name')
         self.email = data.get('email')
-        self.password = data.get('password')
+        self.password = self.__generate_hash(data.get('password')) # add this line
         self.created_at = datetime.datetime.utcnow()
         self.modified_at = datetime.datetime.utcnow()
 
@@ -54,6 +55,8 @@ class UserModel(db.Model):
         # add this new method
 
     def check_hash(self, password):
+        print(self.password)
+        print(password)
         return bcrypt.check_password_hash(self.password, password)
 
     @staticmethod
@@ -64,8 +67,13 @@ class UserModel(db.Model):
     def get_one_user(id):
         return UserModel.query.get(id)
 
+    @staticmethod
+    def get_user_by_email(email):
+        return UserModel.query.filter_by(email=email).first()
+
     def __repr(self):
         return '<id {}>'.format(self.id)
+
 
 class UserSchema(Schema):
     """
