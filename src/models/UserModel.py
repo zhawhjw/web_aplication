@@ -3,7 +3,8 @@ from marshmallow import fields, Schema
 import datetime
 from . import db
 
-from ..models import bcrypt # add this line
+from ..models import bcrypt  # add this line
+from .BlogpostModel import BlogpostSchema
 
 class UserModel(db.Model):
     """
@@ -65,3 +66,15 @@ class UserModel(db.Model):
 
     def __repr(self):
         return '<id {}>'.format(self.id)
+
+class UserSchema(Schema):
+    """
+    User Schema
+    """
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True)
+    created_at = fields.DateTime(dump_only=True)
+    modified_at = fields.DateTime(dump_only=True)
+    blogposts = fields.Nested(BlogpostSchema, many=True)
