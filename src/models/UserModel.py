@@ -3,6 +3,7 @@ from marshmallow import fields, Schema
 import datetime
 from . import db
 
+from ..app import bcrypt # add this line
 
 class UserModel(db.Model):
     """
@@ -43,6 +44,16 @@ class UserModel(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+        # add this new method
+
+    def __generate_hash(self, password):
+        return bcrypt.generate_password_hash(password, rounds=10).decode("utf-8")
+
+        # add this new method
+
+    def check_hash(self, password):
+        return bcrypt.check_password_hash(self.password, password)
 
     @staticmethod
     def get_all_users():
