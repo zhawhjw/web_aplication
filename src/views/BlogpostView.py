@@ -15,7 +15,7 @@ def create():
   """
     req_data = request.get_json()
     req_data['owner_id'] = g.user.get('id')
-    print(req_data)
+    # print(req_data)
     data = blogpost_schema.load(req_data)
     error = None
     if error:
@@ -58,3 +58,47 @@ def get_one(blogpost_id):
         return custom_response({'error': 'post not found'}, 404)
     data = blogpost_schema.dump(post)
     return custom_response(data, 200)
+
+
+@blogpost_api.route('/<int:blogpost_id>', methods=['PUT'])
+@Auth.auth_required
+def update(blogpost_id):
+    """
+    Update A Blogpost
+    """
+    req_data = request.get_json()
+    post = BlogpostModel.get_one_blogpost(blogpost_id)
+    if not post:
+        return custom_response({'error': 'post not found'}, 404)
+    data = blogpost_schema.dump(post)
+    print(data)
+    print(g.user.get('id'))
+
+    if data.get('owner_id') != g.user.get('id'):
+        return custom_response({'error': 'permission denied'}, 400)
+
+    data = blogpost_schema.load(req_data, partial=True)
+    error = None
+    if error:
+        return custom_response(error, 400)
+    post.update(data)
+
+    data = blogpost_schema.dump(post)
+    return custom_response(data, 200)
+
+
+@blogpost_api.route('/<int:blogpost_id>', methods=['DELETE'])
+@Auth.auth_required
+def delete(blogpost_id):
+    """
+  Delete A Blogpost
+  """
+    post = BlogpostModel.get_one_blogpost(blogpost_id)
+    if not post:
+        return custom_response({'error': 'post not found'}, 404)
+    data = blogpost_schema.dump(post)
+    if data.get('owner_id') != g.user.get('id'):
+        return custom_response({'error': 'permission denied'}, 400)
+
+    post.delete()
+    return custom_response({'message': 'deleted'}, 204)
