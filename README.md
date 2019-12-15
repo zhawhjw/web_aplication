@@ -1,7 +1,6 @@
-# web_aplication  
+# setup 
   
-Online Deployment: https://web-application-part3.herokuapp.com/ [https://web-application-part3.herokuapp.com/]  
+Content is no big difference with part 1, part2 and part3.  
   
-Example:  
-POST /api/v1/users - create a user via HTTP/HTTPS(CREATE):  
-![web-register.png](/result3/web-register.png "create a user via HTTP/HTTPS")  
+Just have docker-compose to set up docker database and code has flask framework  
+
