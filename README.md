@@ -1,6 +1,5 @@
-# setup 
+# web_application  
   
-Content is no big difference with part 1, part2 and part3.  
-  
-Just have docker-compose to set up docker database and code has flask framework  
+Master branch: Just baseline for all setups. Please check different branches to see variations  
+
 
